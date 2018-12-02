@@ -7,7 +7,6 @@ import sys
 import shutil
 
 
-
 def files_with_suffix(suffix, start = None):
 	'''
 	Find all files with a specific file ending,
@@ -100,30 +99,6 @@ def delete_tempdir(force = True):
 	shutil.rmtree(tempdir, ignore_errors = force)
 	tempdir = None
 	return
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
