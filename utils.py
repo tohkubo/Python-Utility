@@ -10,9 +10,9 @@ from datetime import datetime as dt
 
 
 
-def count(it):
+def count(it, sorted = True):
 	'''
-	Returns a dictionary of the number
+	Returns list of two-tuples of the number
 	of occurrences for each item in the list
 	'''
 	d = defaultdict(int)
@@ -20,7 +20,9 @@ def count(it):
 	for item in it:
 		d[item] += 1
 
-	return d
+	if sorted:
+		return sorted(d.items(), key = lambda x : x[1])
+	return d.items()
 
 
 def humansort(lst):
