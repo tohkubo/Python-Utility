@@ -37,6 +37,11 @@ def humansort(lst):
 # strlist = ['version ' + str(i) for i in range(1, 15)]
 # strlist.sort(key = humansort)
 
+def prod(iterable):
+	y = 1
+	for value in iterable:
+		y *= value
+	return y
 
 
 

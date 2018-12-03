@@ -7,7 +7,7 @@ import sys
 import shutil
 
 
-def files_with_suffix(suffix, start = None):
+def match_suffix(suffix, start = None):
 	'''
 	Find all files with a specific file ending,
 	starting at the `start` file location (generator).
@@ -25,7 +25,7 @@ def files_with_suffix(suffix, start = None):
 
 
 
-def files_with_prefix(prefix, start = None):
+def match_prefix(prefix, start = None):
 	'''
 	Find all files that begin with a specific
 	string sequence, starting at the `start`
