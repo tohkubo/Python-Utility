@@ -37,13 +37,13 @@ def humansort(lst):
 # strlist = ['version ' + str(i) for i in range(1, 15)]
 # strlist.sort(key = humansort)
 
+
+
 def prod(iterable):
 	y = 1
 	for value in iterable:
 		y *= value
 	return y
-
-
 
 
 def fib_(v):
@@ -62,31 +62,5 @@ def fib(v):
 	elif v == 1:
 		return 1
 	return fib(v - 1) + fib(v - 2)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

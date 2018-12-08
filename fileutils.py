@@ -5,6 +5,7 @@ import os
 import csv
 import sys
 import shutil
+import tempfile
 
 
 def match_suffix(suffix, start = None):
@@ -44,61 +45,58 @@ def match_prefix(prefix, start = None):
 
 
 
+class Tempdir:
 
-tempdir = None
+	__instance = None
+	_tempfolder = None
 
-def create_tempdir():
-	'''
-	Creates a temporary directory for processing
-	files outside of main workspace. Maintain one
-	and only one temporary folder at all times. 
-	'''
-	global tempdir
-	tempdir = os.path.abspath(tempfile.mkdtemp())
-	return tempdir
+	def __init__(self):
+		if __class__.__instance is not None:
+			raise Exception('Error - There can only be one '\
+				'instance; call .getInstance() method.')
+		else:
+			__class__.__instance = self
 
+	@staticmethod
+	def getInstance():
+		if __class__.__instance is None:
+			__class__()
+		return __class__.__instance
 
-def get_tempdir():
-	'''
-	Fetches the temporary directory. Automatically
-	create a new temp directory if it doesn't exist
-	or is inaccessible.
-	'''
-	global tempdir
-	if tempdir is None or not os.path.exists(tempdir):
-		tempdir = os.path.abspath(tempfile.mkdtemp())
-	return tempdir
+	def fetch(self):
+		if self._tempfolder is None:
+			self._tempfolder = self._create_new()
+		return self._tempfolder
 
+	def clear(self):
+		if not os.listdir(self._tempfolder):
+			return self._tempfolder
+		elif self._tempfolder is None or not os.path.exists(self._tempfolder):
+			self._tempfolder = self._create_new()
+			return self._tempfolder
+		for root, subdirs, files in os.walk(self._tempfolder):
+			for f in files:
+				os.unlink(os.path.join(root, f))
+			for d in subdirs:
+				shutil.rmtree(os.path.join(root, d), ignore_errors = True)
 
-def clean_tempdir():
-	'''
-	Wipes all contents inside the current temp directory.
-	Will not delete the actual folder itself; returns
-	empty temp directory.
-	'''
-	global tempdir
-	if not os.listdir(tempdir):
-		return tempdir
-	elif tempdir is None or not os.path.exists(tempdir):
-		tempdir = os.path.abspath(tempfile.mkdtemp())
-		return tempdir
-	for root, subdirs, files in os.walk(tempdir):
-		for f in files:
-			os.unlink(os.path.join(root, f))
-		for d in subdirs:
-			shutil.rmtree(os.path.join(root, d), ignore_errors = True)
-	return tempdir
+		assert not os.listdir(self._tempfolder), 'Error - temporary directory' \
+			' has not been cleared: {}'.format(self._tempfolder)
 
+		return self._tempfolder
 
-def delete_tempdir(force = True):
-	'''
-	Completely destroys the temp directory (including
-	the folder itself).
-	'''
-	global tempdir
-	shutil.rmtree(tempdir, ignore_errors = force)
-	tempdir = None
-	return
+	def delete(self):
+		if self._tempfolder is not None and os.path.exists(self._tempfolder):
+			shutil.rmtree(self._tempfolder, ignore_errors = True)
+
+		assert not os.path.exists(self._tempfolder), 'Error - temporary directory' \
+			' has not been deleted: {}'.format(self._tempfolder)
+
+		self._tempfolder = None
+		return
+
+	def _create_new(self):
+		return os.path.exists(tempfile.mkdtemp())
 
 
 
