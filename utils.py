@@ -7,8 +7,7 @@ import sys
 import shutil
 from collections import defaultdict
 from datetime import datetime as dt
-
-
+from functools import reduce
 
 def count(it, sorted = True):
 	'''
@@ -34,16 +33,12 @@ def humansort(lst):
 		return int(s) if s.isdigit() else s
 	return list(map(atoi, re.split('(\d+)', lst)))
 
-# strlist = ['version ' + str(i) for i in range(1, 15)]
-# strlist.sort(key = humansort)
-
+# strings = ['version ' + str(i) for i in range(1, 15)]
+# strings.sort(key = humansort)
 
 
 def prod(iterable):
-	y = 1
-	for value in iterable:
-		y *= value
-	return y
+	return reduce(lambda x,y : x * y, iterable)
 
 
 def fib_(v):
